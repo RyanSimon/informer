@@ -236,7 +236,7 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
                        OnNetworkErrorActionClickListener onNetworkErrorActionClickListener) {
             super(httpStatusCode, rootView.getContext(), onNetworkErrorActionClickListener);
             mRootView = rootView;
-            mActionButtonViewTextColor = ContextCompat.getColor(mContext, R.color.colorPrimary);
+            mActionButtonViewTextColor = ContextCompat.getColor(mContext, R.color.colorAccent);
             mErrorMessageViewTextColor = ContextCompat.getColor(mContext, android.R.color.primary_text_light);
         }
 
