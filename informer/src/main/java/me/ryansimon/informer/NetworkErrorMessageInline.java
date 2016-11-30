@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -33,7 +35,7 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
     private ViewGroup mRootView;
     private boolean mDismissRootView = false;
 
-    private NetworkErrorMessageInline(final Builder builder, final Context context) {
+    private NetworkErrorMessageInline(@NonNull final Builder builder, @NonNull final Context context) {
         super(builder, context);
 
         // set vars from builder
@@ -41,10 +43,11 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
         mErrorMessageView = builder.mErrorMessageView;
         mActionButtonView = builder.mActionButtonView;
         mInlineErrorContainer = builder.mInlineErrorContainer;
+        if(mInlineErrorContainer != null) mInlineErrorContainer.setVisibility(View.GONE);
         mDismissRootView = builder.mDismissRootView;
 
-        // if there isn't a custom mInlineErrorContainer, then provide a standard one
-        if(mInlineErrorContainer == null) {
+        // if there isn't a custom inline error, then provide a standard one
+        if(mInlineErrorContainer == null && builder.mCustomContainerId == null) {
             mInlineErrorContainer = ViewGroup.inflate(mRootView.getContext(), R.layout.inline_error, mRootView).findViewById(R.id.error_container);
             mActionButtonView = (TextView) mInlineErrorContainer.findViewById(R.id.action_btn);
             mErrorMessageView = (TextView) mInlineErrorContainer.findViewById(R.id.error_msg);
@@ -52,6 +55,10 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
             // set text colors
             mErrorMessageView.setTextColor(builder.mErrorMessageViewTextColor);
             mActionButtonView.setTextColor(builder.mActionButtonViewTextColor);
+        }
+        // if we're using resources to inflate a custom inline layout
+        else if(mInlineErrorContainer == null && builder.mCustomContainerId != null) {
+            inflateCustomInlineLayoutRes(builder, context, mRootView);
         }
         else {
             if(mActionButtonView == null || mErrorMessageView == null) {
@@ -140,6 +147,27 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
     }
 
     /***** HELPER METHODS *****/
+
+    private View inflateCustomInlineLayoutRes(@NonNull final Builder builder,
+                                                 @NonNull final Context context,
+                                                 @NonNull final ViewGroup rootView) {
+        View customContainer = null;
+
+        if(builder.mCustomInlineLayoutId != null
+                && builder.mCustomContainerId != null
+                && builder.mCustomErrorMessageId != null
+                && builder.mCustomActionButtonId != null) {
+            mInlineErrorContainer = ViewGroup.inflate(context, builder.mCustomInlineLayoutId, rootView).findViewById(builder.mCustomContainerId);
+            mInlineErrorContainer.setVisibility(View.GONE);
+            mActionButtonView = (TextView) mInlineErrorContainer.findViewById(builder.mCustomActionButtonId);
+            mErrorMessageView = (TextView) mInlineErrorContainer.findViewById(builder.mCustomErrorMessageId);
+            customContainer = mInlineErrorContainer;
+        } else {
+            throw new IllegalStateException("You must include layout res and View res id's for the layout file, action button, and error message views.");
+        }
+
+        return customContainer;
+    }
 
     private static void configureGenericView(@NonNull final TextView errorMessage,
                                              @NonNull final TextView actionButton,
@@ -230,6 +258,10 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
         private @ColorInt int mErrorMessageViewTextColor;
         private View mInlineErrorContainer = null;
         private boolean mDismissRootView = false;
+        private @LayoutRes Integer mCustomInlineLayoutId = null;
+        private @IdRes Integer mCustomContainerId = null;
+        private @IdRes Integer mCustomActionButtonId = null;
+        private @IdRes Integer mCustomErrorMessageId = null;
 
         public Builder(int httpStatusCode,
                        ViewGroup rootView,
@@ -271,11 +303,22 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
         }
 
         public Builder customErrorViews(View inlineErrorContainer,
-                                            TextView actionButtonView,
-                                            TextView errorMessageView) {
+                                        TextView actionButtonView,
+                                        TextView errorMessageView) {
             mInlineErrorContainer = inlineErrorContainer;
             mActionButtonView = actionButtonView;
             mErrorMessageView = errorMessageView;
+            return this;
+        }
+
+        public Builder customErrorViews(@LayoutRes int customInlineLayoutId,
+                                        @IdRes int customContainerId,
+                                        @IdRes int customActionButtonId,
+                                        @IdRes int customErrorMessageId) {
+            mCustomInlineLayoutId = customInlineLayoutId;
+            mCustomContainerId = customContainerId;
+            mCustomActionButtonId = customActionButtonId;
+            mCustomErrorMessageId = customErrorMessageId;
             return this;
         }
 

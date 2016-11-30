@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity implements OnNetworkErrorAct
         mNetworkErrorMessageSnackbar = new NetworkErrorMessageSnackbar.Builder(HttpStatusCode.BAD_REQUEST, showSnackbarErrorBtn, this).build();
         mNetworkErrorMessageInline = new NetworkErrorMessageInline.Builder(HttpStatusCode.REQUEST_TIMEOUT, rootView, this).build();
 
-        View customErrorContainer = ViewGroup.inflate(this, R.layout.custom_inline_error_layout, rootView).findViewById(R.id.custom_inline_container);
-        TextView customTextView = (TextView) customErrorContainer.findViewById(R.id.custom_inline_error_tv);
-        Button customButton = (Button) customErrorContainer.findViewById(R.id.custom_inline_error_btn);
+        mNetworkErrorMessageSnackbar = new NetworkErrorMessageSnackbar.Builder(HttpStatusCode.BAD_REQUEST, showSnackbarErrorBtn, this).build();
+        mNetworkErrorMessageInline = new NetworkErrorMessageInline.Builder(HttpStatusCode.REQUEST_TIMEOUT, rootView, this).build();
 
         mNetworkErrorMessageCustomInline = new NetworkErrorMessageInline.Builder(HttpStatusCode.INTERNAL_SERVER_ERROR, rootView, this)
-                .customErrorViews(customErrorContainer, customButton, customTextView)
+                .customErrorViews(R.layout.custom_inline_error_layout, R.id.custom_inline_container,
+                        R.id.custom_inline_error_btn, R.id.custom_inline_error_tv)
                 .build();
     }
 
