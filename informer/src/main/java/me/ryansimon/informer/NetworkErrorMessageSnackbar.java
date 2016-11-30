@@ -192,7 +192,7 @@ public final class NetworkErrorMessageSnackbar extends NetworkErrorHandler {
                        OnNetworkErrorActionClickListener onNetworkErrorActionClickListener) {
             super(httpStatusCode, anchorView.getContext(), onNetworkErrorActionClickListener);
             mAnchorView = anchorView;
-            mActionTextColor = ContextCompat.getColor(mContext, R.color.colorPrimary);
+            mActionTextColor = ContextCompat.getColor(mContext, R.color.colorAccent);
         }
 
         public Builder(int httpStatusCode,

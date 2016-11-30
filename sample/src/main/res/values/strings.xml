@@ -6,4 +6,5 @@
     <string name="generic_error_click">Generic error clicked</string>
     <string name="show_snackbar_error">Show Snackbar Error</string>
     <string name="show_inline_error">Show Inline Error</string>
+    <string name="show_custom_inline_error">Show Custom Inline Error</string>
 </resources>

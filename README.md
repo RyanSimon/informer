@@ -26,7 +26,7 @@ allprojects {
 Then add Informer to your dependencies
 ```groovy
 dependencies {
-    compile 'com.github.ryansimon:informer:1.0.0'
+    compile 'com.github.ryansimon:informer:1.0.1'
 }
 ```
  

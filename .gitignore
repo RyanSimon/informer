@@ -1,24 +1,9 @@
 ### Android Studio ###
 local.properties
-.idea/workspace.xml
-.idea/vcs.xml
-.idea/tasks.xml
-.idea/dataSources.ids
-.idea/dataSources.xml
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/encodings.xml
-.idea/.name
-.idea/copyright/
-.idea/dictionaries
-.idea/codeStyleSettings.xml
-.idea/runConfigurations.xml
+.idea
 *.ipr
 *.iws
 *.iml
-.idea/libraries
 
 ### Gradle ###
 .gradle
