@@ -24,6 +24,11 @@
             android:layout_height="wrap_content"
             android:text="@string/show_inline_error" />
 
+        <Button android:id="@+id/show_custom_inline_error_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_custom_inline_error" />
+
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import me.ryansimon.informer.HttpStatusCode;
@@ -16,13 +18,14 @@ public class MainActivity extends AppCompatActivity implements OnNetworkErrorAct
 
     private NetworkErrorMessageSnackbar mNetworkErrorMessageSnackbar;
     private NetworkErrorMessageInline mNetworkErrorMessageInline;
+    private NetworkErrorMessageInline mNetworkErrorMessageCustomInline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewGroup view = (ViewGroup) findViewById(R.id.main_coordinator_layout);
+        ViewGroup rootView = (ViewGroup) findViewById(R.id.main_coordinator_layout);
 
         Button showSnackbarErrorBtn = (Button) findViewById(R.id.show_snackbar_error_btn);
         showSnackbarErrorBtn.setOnClickListener(new View.OnClickListener() {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnNetworkErrorAct
             public void onClick(View view) {
                 mNetworkErrorMessageSnackbar.show();
                 mNetworkErrorMessageInline.dismiss();
+                mNetworkErrorMessageCustomInline.dismiss();
             }
         });
 
@@ -39,11 +43,30 @@ public class MainActivity extends AppCompatActivity implements OnNetworkErrorAct
             public void onClick(View view) {
                 mNetworkErrorMessageInline.show();
                 mNetworkErrorMessageSnackbar.dismiss();
+                mNetworkErrorMessageCustomInline.dismiss();
+            }
+        });
+
+        Button showCustomInlineErrorBtn = (Button) findViewById(R.id.show_custom_inline_error_btn);
+        showCustomInlineErrorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mNetworkErrorMessageCustomInline.show();
+                mNetworkErrorMessageInline.dismiss();
+                mNetworkErrorMessageSnackbar.dismiss();
             }
         });
 
         mNetworkErrorMessageSnackbar = new NetworkErrorMessageSnackbar.Builder(HttpStatusCode.BAD_REQUEST, showSnackbarErrorBtn, this).build();
-        mNetworkErrorMessageInline = new NetworkErrorMessageInline.Builder(HttpStatusCode.REQUEST_TIMEOUT, view, this).build();
+        mNetworkErrorMessageInline = new NetworkErrorMessageInline.Builder(HttpStatusCode.REQUEST_TIMEOUT, rootView, this).build();
+
+        View customErrorContainer = ViewGroup.inflate(this, R.layout.custom_inline_error_layout, rootView).findViewById(R.id.custom_inline_container);
+        TextView customTextView = (TextView) customErrorContainer.findViewById(R.id.custom_inline_error_tv);
+        Button customButton = (Button) customErrorContainer.findViewById(R.id.custom_inline_error_btn);
+
+        mNetworkErrorMessageCustomInline = new NetworkErrorMessageInline.Builder(HttpStatusCode.INTERNAL_SERVER_ERROR, rootView, this)
+                .customErrorViews(customErrorContainer, customButton, customTextView)
+                .build();
     }
 
     @Override

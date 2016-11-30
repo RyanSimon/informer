@@ -48,16 +48,16 @@ public final class NetworkErrorMessageInline extends NetworkErrorHandler {
             mInlineErrorContainer = ViewGroup.inflate(mRootView.getContext(), R.layout.inline_error, mRootView).findViewById(R.id.error_container);
             mActionButtonView = (TextView) mInlineErrorContainer.findViewById(R.id.action_btn);
             mErrorMessageView = (TextView) mInlineErrorContainer.findViewById(R.id.error_msg);
+
+            // set text colors
+            mErrorMessageView.setTextColor(builder.mErrorMessageViewTextColor);
+            mActionButtonView.setTextColor(builder.mActionButtonViewTextColor);
         }
         else {
             if(mActionButtonView == null || mErrorMessageView == null) {
                 throw new IllegalStateException("You must include a actionButtonView and errorMessageView is you're using a custom inlineErrorContainer");
             }
         }
-
-        // set text colors
-        mErrorMessageView.setTextColor(builder.mErrorMessageViewTextColor);
-        mActionButtonView.setTextColor(builder.mActionButtonViewTextColor);
 
         handleError(builder.mHttpStatusCode, new OnNetworkErrorDiscovered() {
             @Override
